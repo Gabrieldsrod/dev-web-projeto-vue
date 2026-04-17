@@ -8,6 +8,19 @@ const monsters = ref([
   { id: 3, name: 'Dragão', class: 'Chefe', level: 50 },
 ])
 
+const newMonster = ref({ name: '', class: '', level: 1 })
+
+const addMonster = () => {
+  if (!newMonster.value.name || !newMonster.value.class) return
+  monsters.value.push({
+    id: Date.now(),
+    name: newMonster.value.name,
+    class: newMonster.value.class,
+    level: newMonster.value.level
+  })
+  newMonster.value = { name: '', class: '', level: 1 }
+}
+
 const filteredMonsters = computed(() => {
   return monsters.value.filter(monster =>
     monster.name.toLowerCase().includes(searchQuery.value.toLowerCase())
@@ -19,6 +32,40 @@ const filteredMonsters = computed(() => {
   <div class="container mx-auto p-4 max-w-4xl">
     <h1 class="text-4xl font-bold mb-8 text-center text-red-500">RPG Bestiary</h1>
     
+    <div class="bg-gray-800 p-5 rounded-lg shadow-lg border border-gray-700 mb-6">
+      <h2 class="text-2xl font-bold text-white mb-4">Adicionar Monstro</h2>
+      <form @submit.prevent="addMonster" class="flex flex-col sm:flex-row gap-4">
+        <input
+          v-model="newMonster.name"
+          type="text"
+          placeholder="Nome"
+          class="flex-1 p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-red-500"
+          required
+        />
+        <input
+          v-model="newMonster.class"
+          type="text"
+          placeholder="Classe"
+          class="flex-1 p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-red-500"
+          required
+        />
+        <input
+          v-model.number="newMonster.level"
+          type="number"
+          min="1"
+          placeholder="Nível"
+          class="w-full sm:w-24 p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-red-500"
+          required
+        />
+        <button
+          type="submit"
+          class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded transition-colors"
+        >
+          Adicionar
+        </button>
+      </form>
+    </div>
+
     <div class="mb-6">
       <input
         v-model="searchQuery"
