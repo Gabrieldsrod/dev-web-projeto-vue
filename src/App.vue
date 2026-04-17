@@ -9,6 +9,8 @@ const monsters = ref([
 ])
 
 const newMonster = ref({ name: '', class: '', level: 1 })
+const editingId = ref(null)
+const editForm = ref({ name: '', class: '', level: 1 })
 
 const addMonster = () => {
   if (!newMonster.value.name || !newMonster.value.class) return
@@ -23,6 +25,23 @@ const addMonster = () => {
 
 const deleteMonster = (id) => {
   monsters.value = monsters.value.filter(monster => monster.id !== id)
+}
+
+const startEdit = (monster) => {
+  editingId.value = monster.id
+  editForm.value = { ...monster }
+}
+
+const saveEdit = () => {
+  const index = monsters.value.findIndex(m => m.id === editingId.value)
+  if (index !== -1) {
+    monsters.value[index] = { ...editForm.value, id: editingId.value }
+  }
+  editingId.value = null
+}
+
+const cancelEdit = () => {
+  editingId.value = null
 }
 
 const filteredMonsters = computed(() => {
@@ -85,19 +104,36 @@ const filteredMonsters = computed(() => {
         :key="monster.id"
         class="bg-gray-800 p-5 rounded-lg shadow-lg border border-gray-700 flex flex-col"
       >
-        <div class="flex-1">
-          <h2 class="text-xl font-bold text-red-400">{{ monster.name }}</h2>
-          <p class="text-gray-300">Classe: <span class="font-semibold">{{ monster.class }}</span></p>
-          <p class="text-gray-300">Nível: <span class="font-semibold">{{ monster.level }}</span></p>
+        <div v-if="editingId === monster.id" class="flex-1 space-y-2">
+          <input v-model="editForm.name" class="w-full p-1 rounded bg-gray-700 text-white border border-gray-600" />
+          <input v-model="editForm.class" class="w-full p-1 rounded bg-gray-700 text-white border border-gray-600" />
+          <input v-model.number="editForm.level" type="number" class="w-full p-1 rounded bg-gray-700 text-white border border-gray-600" />
+          <div class="mt-2 flex gap-2">
+            <button @click="saveEdit" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-sm">Salvar</button>
+            <button @click="cancelEdit" class="bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded text-sm">Cancelar</button>
+          </div>
         </div>
-        <div class="mt-4 flex justify-end">
-          <button
-            @click="deleteMonster(monster.id)"
-            class="bg-red-900 hover:bg-red-800 text-red-200 text-sm py-1 px-3 rounded transition-colors"
-          >
-            Deletar
-          </button>
-        </div>
+        <template v-else>
+          <div class="flex-1">
+            <h2 class="text-xl font-bold text-red-400">{{ monster.name }}</h2>
+            <p class="text-gray-300">Classe: <span class="font-semibold">{{ monster.class }}</span></p>
+            <p class="text-gray-300">Nível: <span class="font-semibold">{{ monster.level }}</span></p>
+          </div>
+          <div class="mt-4 flex justify-end gap-2">
+            <button
+              @click="startEdit(monster)"
+              class="bg-blue-600 hover:bg-blue-700 text-white text-sm py-1 px-3 rounded transition-colors"
+            >
+              Editar
+            </button>
+            <button
+              @click="deleteMonster(monster.id)"
+              class="bg-red-900 hover:bg-red-800 text-red-200 text-sm py-1 px-3 rounded transition-colors"
+            >
+              Deletar
+            </button>
+          </div>
+        </template>
       </div>
     </div>
   </div>
