@@ -21,6 +21,10 @@ const addMonster = () => {
   newMonster.value = { name: '', class: '', level: 1 }
 }
 
+const deleteMonster = (id) => {
+  monsters.value = monsters.value.filter(monster => monster.id !== id)
+}
+
 const filteredMonsters = computed(() => {
   return monsters.value.filter(monster =>
     monster.name.toLowerCase().includes(searchQuery.value.toLowerCase())
@@ -79,11 +83,21 @@ const filteredMonsters = computed(() => {
       <div
         v-for="monster in filteredMonsters"
         :key="monster.id"
-        class="bg-gray-800 p-5 rounded-lg shadow-lg border border-gray-700"
+        class="bg-gray-800 p-5 rounded-lg shadow-lg border border-gray-700 flex flex-col"
       >
-        <h2 class="text-xl font-bold text-red-400">{{ monster.name }}</h2>
-        <p class="text-gray-300">Classe: <span class="font-semibold">{{ monster.class }}</span></p>
-        <p class="text-gray-300">Nível: <span class="font-semibold">{{ monster.level }}</span></p>
+        <div class="flex-1">
+          <h2 class="text-xl font-bold text-red-400">{{ monster.name }}</h2>
+          <p class="text-gray-300">Classe: <span class="font-semibold">{{ monster.class }}</span></p>
+          <p class="text-gray-300">Nível: <span class="font-semibold">{{ monster.level }}</span></p>
+        </div>
+        <div class="mt-4 flex justify-end">
+          <button
+            @click="deleteMonster(monster.id)"
+            class="bg-red-900 hover:bg-red-800 text-red-200 text-sm py-1 px-3 rounded transition-colors"
+          >
+            Deletar
+          </button>
+        </div>
       </div>
     </div>
   </div>
