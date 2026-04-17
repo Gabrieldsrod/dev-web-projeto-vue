@@ -54,7 +54,7 @@ const filteredMonsters = computed(() => {
 <template>
   <div class="container mx-auto p-4 max-w-4xl font-sans">
     <h1 class="text-5xl font-extrabold mb-8 text-center text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-yellow-500 drop-shadow-lg">
-      RPG Bestiary
+      Bestiário RPG
     </h1>
     
     <div class="bg-gray-800 p-6 rounded-xl shadow-2xl border border-gray-700 mb-8 transition-transform hover:scale-[1.01]">
