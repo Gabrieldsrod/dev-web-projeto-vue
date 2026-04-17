@@ -52,24 +52,26 @@ const filteredMonsters = computed(() => {
 </script>
 
 <template>
-  <div class="container mx-auto p-4 max-w-4xl">
-    <h1 class="text-4xl font-bold mb-8 text-center text-red-500">RPG Bestiary</h1>
+  <div class="container mx-auto p-4 max-w-4xl font-sans">
+    <h1 class="text-5xl font-extrabold mb-8 text-center text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-yellow-500 drop-shadow-lg">
+      RPG Bestiary
+    </h1>
     
-    <div class="bg-gray-800 p-5 rounded-lg shadow-lg border border-gray-700 mb-6">
+    <div class="bg-gray-800 p-6 rounded-xl shadow-2xl border border-gray-700 mb-8 transition-transform hover:scale-[1.01]">
       <h2 class="text-2xl font-bold text-white mb-4">Adicionar Monstro</h2>
       <form @submit.prevent="addMonster" class="flex flex-col sm:flex-row gap-4">
         <input
           v-model="newMonster.name"
           type="text"
           placeholder="Nome"
-          class="flex-1 p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-red-500"
+          class="flex-1 p-3 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-shadow"
           required
         />
         <input
           v-model="newMonster.class"
           type="text"
           placeholder="Classe"
-          class="flex-1 p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-red-500"
+          class="flex-1 p-3 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-shadow"
           required
         />
         <input
@@ -77,58 +79,60 @@ const filteredMonsters = computed(() => {
           type="number"
           min="1"
           placeholder="Nível"
-          class="w-full sm:w-24 p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-red-500"
+          class="w-full sm:w-24 p-3 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-shadow"
           required
         />
         <button
           type="submit"
-          class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded transition-colors"
+          class="bg-gradient-to-r from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 text-white font-bold py-3 px-6 rounded shadow-lg transform transition hover:-translate-y-1"
         >
           Adicionar
         </button>
       </form>
     </div>
 
-    <div class="mb-6">
+    <div class="mb-8">
       <input
         v-model="searchQuery"
         type="text"
-        placeholder="Buscar monstro..."
-        class="w-full p-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-red-500"
+        placeholder="Buscar monstro pelo nome..."
+        class="w-full p-4 rounded-xl bg-gray-800 text-white border border-gray-700 shadow-inner focus:outline-none focus:ring-2 focus:ring-red-500 transition-shadow text-lg"
       />
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       <div
         v-for="monster in filteredMonsters"
         :key="monster.id"
-        class="bg-gray-800 p-5 rounded-lg shadow-lg border border-gray-700 flex flex-col"
+        class="bg-gray-800 p-6 rounded-xl shadow-xl border border-gray-700 flex flex-col transform transition-all hover:-translate-y-2 hover:shadow-2xl hover:border-red-900"
       >
-        <div v-if="editingId === monster.id" class="flex-1 space-y-2">
-          <input v-model="editForm.name" class="w-full p-1 rounded bg-gray-700 text-white border border-gray-600" />
-          <input v-model="editForm.class" class="w-full p-1 rounded bg-gray-700 text-white border border-gray-600" />
-          <input v-model.number="editForm.level" type="number" class="w-full p-1 rounded bg-gray-700 text-white border border-gray-600" />
-          <div class="mt-2 flex gap-2">
-            <button @click="saveEdit" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-sm">Salvar</button>
-            <button @click="cancelEdit" class="bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded text-sm">Cancelar</button>
+        <div v-if="editingId === monster.id" class="flex-1 space-y-3">
+          <input v-model="editForm.name" class="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:ring-2 focus:ring-blue-500" />
+          <input v-model="editForm.class" class="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:ring-2 focus:ring-blue-500" />
+          <input v-model.number="editForm.level" type="number" class="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:ring-2 focus:ring-blue-500" />
+          <div class="mt-4 flex gap-2">
+            <button @click="saveEdit" class="flex-1 bg-green-600 hover:bg-green-500 text-white font-bold px-3 py-2 rounded shadow transition-colors">Salvar</button>
+            <button @click="cancelEdit" class="flex-1 bg-gray-600 hover:bg-gray-500 text-white font-bold px-3 py-2 rounded shadow transition-colors">Cancelar</button>
           </div>
         </div>
         <template v-else>
           <div class="flex-1">
-            <h2 class="text-xl font-bold text-red-400">{{ monster.name }}</h2>
-            <p class="text-gray-300">Classe: <span class="font-semibold">{{ monster.class }}</span></p>
-            <p class="text-gray-300">Nível: <span class="font-semibold">{{ monster.level }}</span></p>
+            <h2 class="text-2xl font-extrabold text-red-400 mb-2">{{ monster.name }}</h2>
+            <div class="space-y-1">
+              <p class="text-gray-400">Classe: <span class="font-bold text-gray-200">{{ monster.class }}</span></p>
+              <p class="text-gray-400">Nível: <span class="font-bold text-yellow-500">{{ monster.level }}</span></p>
+            </div>
           </div>
-          <div class="mt-4 flex justify-end gap-2">
+          <div class="mt-6 flex justify-end gap-3 border-t border-gray-700 pt-4">
             <button
               @click="startEdit(monster)"
-              class="bg-blue-600 hover:bg-blue-700 text-white text-sm py-1 px-3 rounded transition-colors"
+              class="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-1.5 px-4 rounded shadow transition-colors"
             >
               Editar
             </button>
             <button
               @click="deleteMonster(monster.id)"
-              class="bg-red-900 hover:bg-red-800 text-red-200 text-sm py-1 px-3 rounded transition-colors"
+              class="bg-red-800 hover:bg-red-600 text-white font-semibold py-1.5 px-4 rounded shadow transition-colors"
             >
               Deletar
             </button>
